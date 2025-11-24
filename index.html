@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poudel Family Mystery</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to bottom, #0b0c10, #1f2833);
+    color: #e6e6e6;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .screen {
+    background: rgba(15, 23, 42, 0.95);
+    border-radius: 14px;
+    padding: 30px;
+    max-width: 800px;
+    width: 100%;
+    display: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  }
+  .active { display: block; }
+  h1, h2 { margin-top:0; color:#66fcf1; }
+  h3 { color:#45a29e; }
+  p { line-height:1.6; margin-bottom:16px; }
+  ul { line-height: 1.6; margin-left: 20px; }
+  .btn {
+    background: linear-gradient(90deg,#45a29e,#66fcf1);
+    border: none;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    color: #0b0c10;
+    transition: 0.2s;
+  }
+  .btn:hover { transform: scale(1.05); background: linear-gradient(90deg,#66fcf1,#45a29e); }
+  .card {
+    background: rgba(11,18,30,0.8);
+    border-radius: 10px;
+    padding: 16px;
+    margin: 12px 0;
+  }
+  .card button {
+    background: #ef233c;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  .card button:hover { background: #d90429; }
+  #result { margin-top:20px; font-size:18px; color:#f1f1f1; }
+</style>
+</head>
+<body>
+
+<!-- Intro Page -->
+<div id="intro" class="screen active">
+  <h1>Case File: The Poudel Family Incident</h1>
+  <p>
+    Late last night, a disturbance was reported at the Poudel household. Neighbors noticed unusual 
+    activity, but each family member insists they were elsewhere. Among them was a mysterious figure 
+    seen near the house.
+  </p>
+  <p>
+    The family: sucpou (elder daughter), prabster (younger daughter), mummypou (mother), baba poudel (father), 
+    and an outsider, Bob. One of them is hiding the truth, but not all clues point directly to the culprit.
+  </p>
+  <p>
+    Your job as the detective is to carefully examine their alibis and statements. Choose wisely.
+  </p>
+  <button class="btn" id="examineBtn">Examine Alibis</button>
+</div>
+
+<!-- Alibi Page -->
+<div id="alibi" class="screen">
+  <h2>Alibis</h2>
+  <div class="card"><b>sucpou:</b> Claims she was reading in her room all night.</div>
+  <div class="card"><b>prabster:</b> Says she was helping her mother in the kitchen preparing snacks.</div>
+  <div class="card"><b>mummypou:</b> States she went to bed early, but some neighbors report seeing her hosting guests.</div>
+  <div class="card"><b>baba poudel:</b> Went for a walk around the block. No one saw him return until after midnight.</div>
+  <div class="card"><b>bob:</b> A delivery driver who claims he was only driving nearby and never stopped at the house.</div>
+  <button class="btn" id="startInvestigationBtn">Start Investigation</button>
+</div>
+
+<!-- Suspect Page -->
+<div id="game" class="screen">
+  <h2>Investigate and Accuse</h2>
+  <p>Read the statements below and accuse the person you believe is responsible.</p>
+
+  <div id="statements"></div>
+
+  <h3>Who do you accuse?</h3>
+  <div class="card">
+    <b>sucpou</b><br>
+    <button data-name="sucpou">Accuse</button>
+  </div>
+  <div class="card">
+    <b>prabster</b><br>
+    <button data-name="prabster">Accuse</button>
+  </div>
+  <div class="card">
+    <b>mummypou</b><br>
+    <button data-name="mummypou">Accuse</button>
+  </div>
+  <div class="card">
+    <b>baba poudel</b><br>
+    <button data-name="baba poudel">Accuse</button>
+  </div>
+  <div class="card">
+    <b>bob</b><br>
+    <button data-name="bob">Accuse</button>
+  </div>
+
+  <p id="result"></p>
+</div>
+
+<script>
+// Show alibis page
+document.getElementById('examineBtn').addEventListener('click', function() {
+  document.getElementById('intro').classList.remove('active');
+  document.getElementById('alibi').classList.add('active');
+});
+
+// Go from alibis to suspect page
+document.getElementById('startInvestigationBtn').addEventListener('click', function() {
+  document.getElementById('alibi').classList.remove('active');
+  document.getElementById('game').classList.add('active');
+
+  document.getElementById('statements').innerHTML = `
+    <p><b>sucpou:</b> "I was reading quietly in my room. I heard nothing unusual."</p>
+    <p><b>prabster:</b> "I was helping mom in the kitchen. I didn’t leave the house at all."</p>
+    <p><b>mummypou:</b> "I went to bed early. I might have left the door unlocked by accident."</p>
+    <p><b>baba poudel:</b> "I took a walk around the block. Everything seemed normal."</p>
+    <p><b>bob:</b> "I was delivering packages nearby. I never entered the house, or so I say."</p>
+  `;
+});
+
+// Accuse buttons
+document.querySelectorAll('.card button').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const name = this.dataset.name;
+    const killer = 'bob';
+    const result = document.getElementById('result');
+    if(name === killer){
+      result.innerHTML = "✔️ Correct! Bob took advantage of the family distractions and is the culprit.";
+    } else {
+      result.innerHTML = "❌ Wrong. The real criminal was Bob. All family members were accounted for.";
+    }
+  });
+});
+</script>
+
+</body>
+</html>
